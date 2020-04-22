@@ -11,7 +11,7 @@ public class Gantt extends PApplet
 	ArrayList<Task> tasks = new ArrayList<Task>();
 
 	float border;
-	float value = 0;
+	float value;
 	
 	public void settings()
 	{
@@ -73,33 +73,36 @@ public class Gantt extends PApplet
 			textAlign(PApplet.CENTER, PApplet.CENTER);
 			textSize(15);
 			text(tasks.get(i).getTask(), width * 0.1f, y);
-
+			float test;
 			noStroke();
 			fill(i * c, 255, 255); 
-			if(mousePressed && (mouseX >= (e + s) * 0.5f)
+			if(mousePressed && (mouseX >= (e + s) * 0.5f) && ((mouseX < e) || (mouseX < width -50))
 				&& (mouseY > y-20) && (mouseY < y + 20))
 			{
-				rect(s, y - 20, value -(e - s), 40, 7);
+
+				rect(s, y - 20, value - 150, 40, 7);
 			}
 			else
 			{
 				rect(s, y - 20, (e - s), 40, 7);
 			}
+
 		}
 	}
 
 	public void mousePressed()
 	{
 		// println("Mouse pressed");
+		value = mouseX;
 	}
 
 	public void mouseDragged()
 	{
 		// println("Mouse dragged");
-		value = map(mouseX, 0, width, 150, width - 50);
-		
-		System.out.println(value);
-		
+		if(value < 750 && value > 150)
+		{
+			value = mouseX;
+		}
 	}
 	
 	public void setup() 
