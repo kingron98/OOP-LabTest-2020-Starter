@@ -9,12 +9,15 @@ import processing.data.TableRow;
 public class Gantt extends PApplet
 {	
 	ArrayList<Task> tasks = new ArrayList<Task>();
-	boolean check = false;
+
+	float border;
 	float value = 0;
 	
 	public void settings()
 	{
 		size(800, 600);
+		
+		border = height * 0.1f;
 	}
 
 	public void loadTasks()
@@ -37,8 +40,6 @@ public class Gantt extends PApplet
 	
 	public void displayTasks()
 	{
-		float border = height * 0.1f;
-
 		for(int i = 1; i <= 30; i++)
 		{
 			float x = map(i, 1, 30, 150, width - 50);
@@ -73,54 +74,33 @@ public class Gantt extends PApplet
 			textSize(15);
 			text(tasks.get(i).getTask(), width * 0.1f, y);
 
-			// noStroke();
-			// fill(i * c, 255, 255); 
-			// if(check || (mouseX >= (e + s) * 0.5f) && (mouseX < e))
-			// {
-			// 	rect(s, y - 20, (e - s) + value, 40, 7);
-			// }
-			// else
-			// {
-			// 	rect(s, y - 20, (e - s), 40, 7);
-			// }
-		}
-	}
-
-	public void displayTasksBox(float i, float c, float e, float s, float y)
-	{	
-		noStroke();
-		fill(i * c, 255, 255); 
-		if(check || (mouseX >= (e + s) * 0.5f) && (mouseX < e))
-		{
-			rect(s, y - 20, (e - s) + value, 40, 7);
-		}
-		else
-		{
-			rect(s, y - 20, (e - s), 40, 7);
+			noStroke();
+			fill(i * c, 255, 255); 
+			if(mousePressed && (mouseX >= (e + s) * 0.5f)
+				&& (mouseY > y-20) && (mouseY < y + 20))
+			{
+				rect(s, y - 20, value -(e - s), 40, 7);
+			}
+			else
+			{
+				rect(s, y - 20, (e - s), 40, 7);
+			}
 		}
 	}
 
 	public void mousePressed()
 	{
-		println("Mouse pressed");
-		check = true;
+		// println("Mouse pressed");
 	}
 
 	public void mouseDragged()
 	{
 		// println("Mouse dragged");
+		value = map(mouseX, 0, width, 150, width - 50);
 		
-		if(check)
-		{
-			if(value != width - 280)
-			{
-				value = mouseX - 220;
-				System.out.println(value);
-			}
-			
-		}
+		System.out.println(value);
+		
 	}
-
 	
 	public void setup() 
 	{
@@ -133,18 +113,5 @@ public class Gantt extends PApplet
 	{			
 		background(0);
 		displayTasks();
-		for(int i = 0; i < tasks.size(); i++)
-		{
-			float border = height * 0.1f;
-			float y = map(i, 0, tasks.size(), border + 50, height - 100);
-
-			float start = tasks.get(i).getStart();
-			float end = tasks.get(i).getEnd();
-			float s = map(start, 1, 30, 150, width - 50);
-			float e = map(end, 1, 30, 150, width - 50);
-
-			float c = 255 / tasks.size();
-			displayTasksBox(i, c, e, s, y);
-		}
 	}
 }
